@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: claires-streamlitapp-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: claires-streamlitapp
+  template:
+    metadata:
+      labels:
+        app: claires-streamlitapp
+    spec:
+      containers:
+      - name: claires-streamlit
+        image: ClairesStreamlit.azurecr.io/claires-streamlitapp:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: claires-streamlitapp-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: claires-streamlitapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
